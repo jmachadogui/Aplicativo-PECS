@@ -57,6 +57,7 @@ export default class prototipoV1 extends Component {
                 <View style={Estilos.preview}>
                 
                 </View>
+                    <Text>aaa</Text>
                     <View style={Estilos.areaPecs}> 
                         <Pecs endereco={this.state.enderecoImg} estiloPec = {Estilos.imgPecsAdicionar} />
                     </View>
