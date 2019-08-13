@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
 import { AppRegistry, View, Text, Image, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
-
-
 import Estilos from "./src/estilos/style.js" ;
-pressionou = () => {
-    alert('pressionou né safado');
-};
+
 class Pecs extends Component{
     render() {
         const localImg = this.props.endereco;
@@ -24,14 +20,6 @@ export default class prototipoV1 extends Component {
                 comer: require('./imgs/pecs/acoes/comer.png'),
                 correr: require('./imgs/pecs/acoes/correr.png'),
                 beber: require('./imgs/pecs/acoes/beber.png'),
-                banana: require('./imgs/pecs/frutas/banana.png'),
-                melancia: require('./imgs/pecs/frutas/melancia.png'),
-                pera: require('./imgs/pecs/frutas/pera.png'),
-                boca: require('./imgs/pecs/partesCorpo/boca.png'),
-                mao: require('./imgs/pecs/partesCorpo/mao.png'),
-                olho: require('./imgs/pecs/partesCorpo/olho.png'),
-
-                arrayEnderecos: []
             };
         }
         alteraPec(local) {
@@ -57,7 +45,6 @@ export default class prototipoV1 extends Component {
                 <View style={Estilos.preview}>
                 
                 </View>
-                    <Text>aaa</Text>
                     <View style={Estilos.areaPecs}> 
                         <Pecs endereco={this.state.enderecoImg} estiloPec = {Estilos.imgPecsAdicionar} />
                     </View>
