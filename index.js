@@ -1,30 +1,25 @@
 import React, { Component } from 'react';
-import { AppRegistry, View, Text, Image, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
+import { AppRegistry, View, Text, Image, TouchableOpacity, FlatList} from 'react-native';
 import Estilos from "./src/estilos/style.js" ;
+import Pecs from "./src/Pecs.js";
 
-class Pecs extends Component{
-    render() {
-        const localImg = this.props.endereco;
-        const estiloPec = this.props.estiloPec;
-        return(
-            <Image source = {localImg} style = {estiloPec} />
-        );
-}
-
-}
 export default class prototipoV1 extends Component {
         constructor (props) {
             super(props);
             this.state = { 
                 enderecoImg: require('./imgs/adicionar.png'),
-                comer: require('./imgs/pecs/acoes/comer.png'),
-                correr: require('./imgs/pecs/acoes/correr.png'),
-                beber: require('./imgs/pecs/acoes/beber.png'),
+                arrayPecs:[
+                    {id:'00', endereco: require(../imgs/pecs/acoes/comer.png)},
+                    {id:'01', endereco: require(../imgs/pecs/acoes/beber.png)},
+                    {id:'02', endereco: require(../imgs/pecs/acoes/dormir.png)},
+                    {id:'03', endereco: require(../imgs/pecs/acoes/correr.png)},
+                    {id:'04', endereco: require(../imgs/pecs/acoes/abraçar.png)},
+                    {id:'05', endereco: require(../imgs/pecs/acoes/beijar.png)},
+                    {id:'06', endereco: require(../imgs/pecs/acoes/euQuero.png)},
+                ]
             };
         }
-        alteraPec(local) {
-            this.setState({enderecoImg: local});
-        }
+       
 
         render() {
             return (
@@ -50,19 +45,16 @@ export default class prototipoV1 extends Component {
                     </View>
                     <View style={Estilos.categorias}></View>
                     
-                    <ScrollView style={Estilos.scrollTeclado}>
-                        <View style={Estilos.teclado}>
-                            <TouchableOpacity onPress={ ()=>{this.alteraPec(this.state.comer)}}>
-                                <Pecs endereco={this.state.comer} estiloPec = {Estilos.imgPecs}/>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={ ()=>{this.alteraPec(this.state.correr)}}>
-                                <Pecs endereco={this.state.correr} estiloPec = {Estilos.imgPecs}/>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={ ()=>{this.alteraPec(this.state.beber)}}>
-                                <Pecs endereco={this.state.beber} estiloPec = {Estilos.imgPecs}/>
-                            </TouchableOpacity>
-                        </View>
-                    </ScrollView>
+                   <FlatList 
+                    numCollumms={3}
+                    data={this.state.arrayPecs}
+                    keyExtractor={item => item.id}
+                    renderItem={({item}) =>{
+                        return(
+                            <Pecs endereco={item.endereco}/>
+                        );
+                    }}
+                   />
                     
             </View>
             );

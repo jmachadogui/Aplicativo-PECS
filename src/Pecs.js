@@ -6,9 +6,7 @@ export default class Pecs extends Component{
 	
 	render(){
 		return(
-			<TouchableOpacity>
-
-			</TouchableOpacity>
+			<Image source={this.props.endereco} style={Estilos.imgPecs}/>
 		);
 	}
 }
