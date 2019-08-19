@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 const Estilos = StyleSheet.create({
     body:{
         backgroundColor: 'white',
-        flex: 1
+        flex: 1,
       },
       header:{
         padding: 10,
@@ -54,7 +54,8 @@ const Estilos = StyleSheet.create({
        flex:1
       },
       imgPecs:{
-        marginTop: 15,
+        marginTop: 5,
+        margin:5,
         height: 125,
         width: 95
       },

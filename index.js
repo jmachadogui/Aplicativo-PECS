@@ -7,20 +7,21 @@ export default class prototipoV1 extends Component {
         constructor (props) {
             super(props);
             this.state = { 
-                enderecoImg: require('./imgs/adicionar.png'),
-                arrayPecs:[
-                    {id:'00', endereco: require(../imgs/pecs/acoes/comer.png)},
-                    {id:'01', endereco: require(../imgs/pecs/acoes/beber.png)},
-                    {id:'02', endereco: require(../imgs/pecs/acoes/dormir.png)},
-                    {id:'03', endereco: require(../imgs/pecs/acoes/correr.png)},
-                    {id:'04', endereco: require(../imgs/pecs/acoes/abraçar.png)},
-                    {id:'05', endereco: require(../imgs/pecs/acoes/beijar.png)},
-                    {id:'06', endereco: require(../imgs/pecs/acoes/euQuero.png)},
+                pecAddImg: require('./imgs/adicionar.png'),
+                arrayAcoes: [
+                    {id: "00", endereco: require('./imgs/pecs/acoes/correr.png'), valor: "Correr"},
+                    {id: "01", endereco: require('./imgs/pecs/acoes/comer.png'), valor: "Comer"},
+                    {id: "02", endereco: require('./imgs/pecs/acoes/Dormir.png'), valor: "Dormir"},
+                    {id: "03", endereco: require('./imgs/pecs/acoes/euEstou.png'), valor: "Eu estou"},
+                    {id: "04", endereco: require('./imgs/pecs/acoes/beijar.png'), valor: "Beijar"},
+                    {id: "05", endereco: require('./imgs/pecs/acoes/chorar.png'), valor: "Chorar"},
                 ]
             };
         }
        
-
+        mudaPec(valor, endereco){
+            this.setState({pecAddImg: endereco});
+        }
         render() {
             return (
             <View style={Estilos.body}>
@@ -41,20 +42,25 @@ export default class prototipoV1 extends Component {
                 
                 </View>
                     <View style={Estilos.areaPecs}> 
-                        <Pecs endereco={this.state.enderecoImg} estiloPec = {Estilos.imgPecsAdicionar} />
+                        <Pecs endereco={this.state.pecAddImg} estiloPec = {Estilos.imgPecsAdicionar} />
                     </View>
                     <View style={Estilos.categorias}></View>
-                    
-                   <FlatList 
-                    numCollumms={3}
-                    data={this.state.arrayPecs}
-                    keyExtractor={item => item.id}
-                    renderItem={({item}) =>{
-                        return(
-                            <Pecs endereco={item.endereco}/>
-                        );
-                    }}
-                   />
+                    <FlatList 
+                        data={this.state.arrayAcoes}
+                        keyExtractor={item=> item.id}
+                        numColumns={3}
+                        contentContainerStyle={{alignItems:'center',}}
+                        renderItem ={ ({item}) =>{
+                            return(
+                                <TouchableOpacity
+                                    onPress={ ()=>{this.mudaPec(item.valor, item.endereco)} } 
+                                >
+                                    <Image source={item.endereco} style={Estilos.imgPecs}/>
+                                </TouchableOpacity>
+                            );
+                        }}
+                    />
+                 
                     
             </View>
             );
