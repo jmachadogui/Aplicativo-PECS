@@ -62,6 +62,11 @@ const Estilos = StyleSheet.create({
       categorias:{
         height: 35,
         backgroundColor: '#dfe3e6'
+      },
+      pecsPreview:{
+        height: 60,
+        width: 45,
+        margin: 5
       }
 });
 export default Estilos;

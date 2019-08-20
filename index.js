@@ -9,18 +9,27 @@ export default class prototipoV1 extends Component {
             this.state = { 
                 pecAddImg: require('./imgs/adicionar.png'),
                 arrayAcoes: [
-                    {id: "00", endereco: require('./imgs/pecs/acoes/correr.png'), valor: "Correr"},
+                    {id: "00", endereco: require('./imgs/pecs/acoes/beber.png'), valor: "Correr"},
                     {id: "01", endereco: require('./imgs/pecs/acoes/comer.png'), valor: "Comer"},
                     {id: "02", endereco: require('./imgs/pecs/acoes/Dormir.png'), valor: "Dormir"},
                     {id: "03", endereco: require('./imgs/pecs/acoes/euEstou.png'), valor: "Eu estou"},
                     {id: "04", endereco: require('./imgs/pecs/acoes/beijar.png'), valor: "Beijar"},
                     {id: "05", endereco: require('./imgs/pecs/acoes/chorar.png'), valor: "Chorar"},
-                ]
+                    {id: "06", endereco: require('./imgs/pecs/alimentos/cafe.png'), valor: "Café"},
+                    {id: "07", endereco: require('./imgs/pecs/alimentos/biscoito.png'), valor: "Biscoito"},
+                    {id: "08", endereco: require('./imgs/pecs/alimentos/bolo.png'), valor: "Banana"},
+                    {id: "09", endereco: require('./imgs/pecs/estados/feliz.png'), valor: "Feliz"},
+                    {id: "10", endereco: require('./imgs/pecs/estados/triste.png'), valor: "Triste"},
+                    {id: "11", endereco: require('./imgs/pecs/estados/faminto.png'), valor: "Faminto"},
+                ],
+                historico:[]
             };
         }
        
-        mudaPec(valor, endereco){
-            this.setState({pecAddImg: endereco});
+        mudaPec(pec){
+            this.setState({pecAddImg: pec.endereco});
+            const lista = this.state.historico.concat(pec);
+            this.setState({historico: lista});
         }
         render() {
             return (
@@ -39,7 +48,16 @@ export default class prototipoV1 extends Component {
                 </View>
 
                 <View style={Estilos.preview}>
-                
+                    <FlatList
+                        horizontal = {true}
+                        data={this.state.historico}
+                        keyExtractor={item=>item.id}
+                        renderItem = { ({item}) =>{
+                            return(
+                                <Image source={item.endereco} style={Estilos.pecsPreview}/>
+                            );
+                        }}
+                    />
                 </View>
                     <View style={Estilos.areaPecs}> 
                         <Pecs endereco={this.state.pecAddImg} estiloPec = {Estilos.imgPecsAdicionar} />
@@ -53,7 +71,7 @@ export default class prototipoV1 extends Component {
                         renderItem ={ ({item}) =>{
                             return(
                                 <TouchableOpacity
-                                    onPress={ ()=>{this.mudaPec(item.valor, item.endereco)} } 
+                                    onPress={ ()=>{this.mudaPec(item)} } 
                                 >
                                     <Image source={item.endereco} style={Estilos.imgPecs}/>
                                 </TouchableOpacity>
