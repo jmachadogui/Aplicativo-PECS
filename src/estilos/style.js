@@ -67,6 +67,21 @@ const Estilos = StyleSheet.create({
         height: 60,
         width: 45,
         margin: 5
+      },
+      btnApaga:{
+        alignSelf:'center',
+        height: 20,
+        width:'50%',
+        alignItems:'center',
+        borderWidth: 1,
+        borderColor:'red',
+        borderBottomEndRadius: 10,
+        borderBottomStartRadius:10,
+        backgroundColor: 'red',
+      },
+      btnTxt:{
+        color:'white',
+        fontWeight:'bold'
       }
 });
 export default Estilos;

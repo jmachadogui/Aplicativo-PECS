@@ -11,7 +11,7 @@ export default class prototipoV1 extends Component {
                 arrayAcoes: [
                     {id: "00", endereco: require('./imgs/pecs/acoes/beber.png'), valor: "Correr"},
                     {id: "01", endereco: require('./imgs/pecs/acoes/comer.png'), valor: "Comer"},
-                    {id: "02", endereco: require('./imgs/pecs/acoes/Dormir.png'), valor: "Dormir"},
+                    {id: "02", endereco: require('./imgs/pecs/acoes/euQuero.png'), valor: "Eu quero"},
                     {id: "03", endereco: require('./imgs/pecs/acoes/euEstou.png'), valor: "Eu estou"},
                     {id: "04", endereco: require('./imgs/pecs/acoes/beijar.png'), valor: "Beijar"},
                     {id: "05", endereco: require('./imgs/pecs/acoes/chorar.png'), valor: "Chorar"},
@@ -22,7 +22,8 @@ export default class prototipoV1 extends Component {
                     {id: "10", endereco: require('./imgs/pecs/estados/triste.png'), valor: "Triste"},
                     {id: "11", endereco: require('./imgs/pecs/estados/faminto.png'), valor: "Faminto"},
                 ],
-                historico:[]
+                historico:[],
+                btnApagar: false
             };
         }
        
@@ -30,6 +31,14 @@ export default class prototipoV1 extends Component {
             this.setState({pecAddImg: pec.endereco});
             const lista = this.state.historico.concat(pec);
             this.setState({historico: lista});
+            if(this.state.historico.length >= 0){
+                this.setState({btnApagar: true});
+            }
+        }
+        apagaPec(){
+            const lista = this.state.historico;
+            lista.pop();
+            this.setState({historico:lista});
         }
         render() {
             return (
@@ -59,7 +68,14 @@ export default class prototipoV1 extends Component {
                         }}
                     />
                 </View>
-                    <View style={Estilos.areaPecs}> 
+                {
+                    this.state.btnApagar ?( <TouchableOpacity onPress={()=>{this.apagaPec()}}>
+                        <View style={Estilos.btnApaga}>
+                            <Text style={Estilos.btnTxt}> X </Text>
+                        </View>
+                    </TouchableOpacity>):null}
+                   
+                    <View style={Estilos.areaPecs}>
                         <Pecs endereco={this.state.pecAddImg} estiloPec = {Estilos.imgPecsAdicionar} />
                     </View>
                     <View style={Estilos.categorias}></View>
