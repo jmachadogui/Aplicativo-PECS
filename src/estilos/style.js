@@ -69,13 +69,12 @@ const Estilos = StyleSheet.create({
         margin: 5
       },
       btnApaga:{
-        alignSelf:'center',
-        height: 20,
-        width:'50%',
+        alignSelf:'flex-end',
+        height: 25,
+        width:'15%',
         alignItems:'center',
         borderWidth: 1,
         borderColor:'red',
-        borderBottomEndRadius: 10,
         borderBottomStartRadius:10,
         backgroundColor: 'red',
       },

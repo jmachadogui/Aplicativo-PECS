@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { AppRegistry, View, Text, Image, TouchableOpacity, FlatList} from 'react-native';
+import Tts from 'react-native-tts';
 import Estilos from "./src/estilos/style.js" ;
 import Pecs from "./src/Pecs.js";
 
@@ -9,7 +10,7 @@ export default class prototipoV1 extends Component {
             this.state = { 
                 pecAddImg: require('./imgs/adicionar.png'),
                 arrayAcoes: [
-                    {id: "00", endereco: require('./imgs/pecs/acoes/beber.png'), valor: "Correr"},
+                    {id: "00", endereco: require('./imgs/pecs/acoes/beber.png'), valor: "Beber"},
                     {id: "01", endereco: require('./imgs/pecs/acoes/comer.png'), valor: "Comer"},
                     {id: "02", endereco: require('./imgs/pecs/acoes/euQuero.png'), valor: "Eu quero"},
                     {id: "03", endereco: require('./imgs/pecs/acoes/euEstou.png'), valor: "Eu estou"},
@@ -17,34 +18,45 @@ export default class prototipoV1 extends Component {
                     {id: "05", endereco: require('./imgs/pecs/acoes/chorar.png'), valor: "Chorar"},
                     {id: "06", endereco: require('./imgs/pecs/alimentos/cafe.png'), valor: "Café"},
                     {id: "07", endereco: require('./imgs/pecs/alimentos/biscoito.png'), valor: "Biscoito"},
-                    {id: "08", endereco: require('./imgs/pecs/alimentos/bolo.png'), valor: "Banana"},
+                    {id: "08", endereco: require('./imgs/pecs/alimentos/bolo.png'), valor: "Bolo"},
                     {id: "09", endereco: require('./imgs/pecs/estados/feliz.png'), valor: "Feliz"},
                     {id: "10", endereco: require('./imgs/pecs/estados/triste.png'), valor: "Triste"},
                     {id: "11", endereco: require('./imgs/pecs/estados/faminto.png'), valor: "Faminto"},
                 ],
                 historico:[],
-                btnApagar: false
+                btnApagar: false,
+                frase: ""
             };
         }
        
         mudaPec(pec){
             this.setState({pecAddImg: pec.endereco});
             const lista = this.state.historico.concat(pec);
+
+            this.setState({frase: this.state.frase +" " +pec.valor});
             this.setState({historico: lista});
             if(this.state.historico.length >= 0){
                 this.setState({btnApagar: true});
             }
         }
+
         apagaPec(){
             const lista = this.state.historico;
             lista.pop();
+            if (lista.length == 0)
+               this.setState({historico:[]});
+            else
             this.setState({historico:lista});
+            this.setState({frase:' '})
+        }
+        montaFrase(){
+            return this.state.frase;
         }
         render() {
             return (
             <View style={Estilos.body}>
                  <View style={Estilos.header}>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={()=>{Tts.speak( this.montaFrase())}}>
                         <Image style={Estilos.speakerIcon} source={require('./imgs/speaker-icon.png')}/>
                     </TouchableOpacity>
                     <TouchableOpacity>
