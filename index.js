@@ -25,16 +25,15 @@ export default class prototipoV1 extends Component {
                 ],
                 historico:[],
                 btnApagar: false,
-                frase: ""
+                frase: []
             };
         }
        
         mudaPec(pec){
             this.setState({pecAddImg: pec.endereco});
             const lista = this.state.historico.concat(pec);
-
-            this.setState({frase: this.state.frase +" " +pec.valor});
-            this.setState({historico: lista});
+            const frase = this.state.frase.concat(pec.valor)
+            this.setState({historico: lista, frase:frase});
             if(this.state.historico.length >= 0){
                 this.setState({btnApagar: true});
             }
@@ -43,20 +42,27 @@ export default class prototipoV1 extends Component {
         apagaPec(){
             const lista = this.state.historico;
             lista.pop();
-            if (lista.length == 0)
+            if (lista.length == 0){
                this.setState({historico:[]});
+               this.setState({pecAddImg: require('./imgs/adicionar.png')});
+               this.setState({btnApagar: false})
+            }
             else
-            this.setState({historico:lista});
-            this.setState({frase:' '})
+                this.setState({historico:lista});
+           var pecApagada = [...this.state.frase];
+            const indexFrase = this.state.frase.length - 1;
+            pecApagada.splice(indexFrase, 1);
+            this.setState({frase:pecApagada});
         }
-        montaFrase(){
-            return this.state.frase;
+        montaFrase(fraseArray){
+            frase = fraseArray.join(' ');
+            return frase;
         }
         render() {
             return (
             <View style={Estilos.body}>
                  <View style={Estilos.header}>
-                    <TouchableOpacity onPress={()=>{Tts.speak( this.montaFrase())}}>
+                    <TouchableOpacity onPress={()=>{Tts.speak( this.montaFrase(this.state.frase))}}>
                         <Image style={Estilos.speakerIcon} source={require('./imgs/speaker-icon.png')}/>
                     </TouchableOpacity>
                     <TouchableOpacity>
