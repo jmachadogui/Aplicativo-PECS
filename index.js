@@ -8,7 +8,7 @@ export default class prototipoV1 extends Component {
         constructor (props) {
             super(props);
             this.state = { 
-                pecAddImg: require('./imgs/adicionar.png'),
+                pecAtual: require('./imgs/adicionar.png'),
                 arrayAcoes: [
                     {id: "00", endereco: require('./imgs/pecs/acoes/beber.png'), valor: "Beber"},
                     {id: "01", endereco: require('./imgs/pecs/acoes/comer.png'), valor: "Comer"},
@@ -30,7 +30,7 @@ export default class prototipoV1 extends Component {
         }
        
         mudaPec(pec){
-            this.setState({pecAddImg: pec.endereco});
+            this.setState({pecAtual: pec.endereco});
             const lista = this.state.historico.concat(pec);
             const frase = this.state.frase.concat(pec.valor)
             this.setState({historico: lista, frase:frase});
@@ -41,22 +41,32 @@ export default class prototipoV1 extends Component {
 
         apagaPec(){
             const lista = this.state.historico;
-            lista.pop();
-            if (lista.length == 0){
+           
+            if (lista.length == 1){
                this.setState({historico:[]});
-               this.setState({pecAddImg: require('./imgs/adicionar.png')});
+               this.setState({pecAtual: require('./imgs/adicionar.png')});
                this.setState({btnApagar: false})
             }
-            else
-                this.setState({historico:lista});
-           var pecApagada = [...this.state.frase];
+           else{
+             lista.pop();
+             let indexAtual = lista.length-1;
+             let pecAtual = lista[indexAtual];
+            this.setState({pecAtual: pecAtual.endereco});
+           }
+            this.apagaFrase();
+        }
+        apagaFrase(){
+            var fraseApagada = [...this.state.frase];
             const indexFrase = this.state.frase.length - 1;
-            pecApagada.splice(indexFrase, 1);
-            this.setState({frase:pecApagada});
+            fraseApagada.splice(indexFrase, 1);
+            this.setState({frase:fraseApagada});
         }
         montaFrase(fraseArray){
             frase = fraseArray.join(' ');
             return frase;
+        }
+        on_pecPreviewClick(pec){
+            this.setState({pecAtual: pec.endereco});
         }
         render() {
             return (
@@ -81,7 +91,11 @@ export default class prototipoV1 extends Component {
                         keyExtractor={item=>item.id}
                         renderItem = { ({item}) =>{
                             return(
-                                <Image source={item.endereco} style={Estilos.pecsPreview}/>
+                                <TouchableOpacity
+                                    onPress={()=>{this.on_pecPreviewClick(item)}}
+                                >
+                                    <Image source={item.endereco} style={Estilos.pecsPreview}/>
+                                </TouchableOpacity>
                             );
                         }}
                     />
@@ -94,7 +108,7 @@ export default class prototipoV1 extends Component {
                     </TouchableOpacity>):null}
                    
                     <View style={Estilos.areaPecs}>
-                        <Pecs endereco={this.state.pecAddImg} estiloPec = {Estilos.imgPecsAdicionar} />
+                        <Pecs endereco={this.state.pecAtual} estiloPec = {Estilos.imgPecsAdicionar} />
                     </View>
                     <View style={Estilos.categorias}></View>
                     <FlatList 
