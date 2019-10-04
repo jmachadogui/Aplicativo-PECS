@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { AppRegistry, View, Text, Image, TouchableOpacity, FlatList} from 'react-native';
+import { AppRegistry, View, Text, Image, TouchableOpacity, FlatList,} from 'react-native';
 import Tts from 'react-native-tts';
+import DoubleClick from 'react-native-double-tap';
 import Estilos from "./src/estilos/style.js" ;
 import Pecs from "./src/Pecs.js";
 
@@ -24,6 +25,7 @@ export default class prototipoV1 extends Component {
                     {id: "11", endereco: require('./imgs/pecs/estados/faminto.png'), valor: "Faminto"},
                 ],
                 historico:[],
+                indexAtual: null,
                 btnApagar: false,
                 frase: []
             };
@@ -34,21 +36,22 @@ export default class prototipoV1 extends Component {
             const lista = this.state.historico.concat(pec);
             const frase = this.state.frase.concat(pec.valor)
             this.setState({historico: lista, frase:frase});
+            this.setState({indexAtual: this.state.historico.length+1});
             if(this.state.historico.length >= 0){
                 this.setState({btnApagar: true});
             }
         }
 
-        apagaPec(){
+        apagaPec(pec){
             const lista = this.state.historico;
-           
+            const index = this.state.historico.indexOf(pec);
             if (lista.length == 1){
                this.setState({historico:[]});
                this.setState({pecAtual: require('./imgs/adicionar.png')});
                this.setState({btnApagar: false})
             }
            else{
-             lista.pop();
+             lista.splice(index, 1);
              let indexAtual = lista.length-1;
              let pecAtual = lista[indexAtual];
             this.setState({pecAtual: pecAtual.endereco});
@@ -66,7 +69,9 @@ export default class prototipoV1 extends Component {
             return frase;
         }
         on_pecPreviewClick(pec){
-            this.setState({pecAtual: pec.endereco});
+            let index = this.state.historico.indexOf(pec);
+            alert(index);
+            this.setState({pecAtual: pec.endereco, indexAtual: index});
         }
         render() {
             return (
@@ -91,11 +96,12 @@ export default class prototipoV1 extends Component {
                         keyExtractor={item=>item.id}
                         renderItem = { ({item}) =>{
                             return(
-                                <TouchableOpacity
-                                    onPress={()=>{this.on_pecPreviewClick(item)}}
+                                <DoubleClick
+                                singleTap={ ()=>{this.on_pecPreviewClick(item)} }
+                                doubleTap={ ()=>{this.apagaPec(item)} }
                                 >
                                     <Image source={item.endereco} style={Estilos.pecsPreview}/>
-                                </TouchableOpacity>
+                                </DoubleClick>
                             );
                         }}
                     />
