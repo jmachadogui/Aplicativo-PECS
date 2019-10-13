@@ -33,7 +33,8 @@ const Estilos = StyleSheet.create({
         borderRadius: 10
       },
       areaPecs:{
-        height: 220,
+        height: 230,
+        width:'100%',
         justifyContent: 'center',
         alignItems: 'center',
       },

@@ -1,15 +1,19 @@
 import React, { Component } from 'react';
-import { AppRegistry, View, Text, Image, TouchableOpacity, FlatList,} from 'react-native';
+import { AppRegistry, View, Text, Image, TouchableOpacity, FlatList,PanResponder} from 'react-native';
+import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
 import Tts from 'react-native-tts';
 import DoubleClick from 'react-native-double-tap';
 import Estilos from "./src/estilos/style.js" ;
 import Pecs from "./src/Pecs.js";
-
+{Tts.setDefaultLanguage('pt-BR')};
 export default class prototipoV1 extends Component {
         constructor (props) {
             super(props);
             this.state = { 
                 pecAtual: require('./imgs/adicionar.png'),
+                pecAtualMarginLeft:'35%',
+                pecAtualMarginRight: 0,
+                background: null,
                 arrayAcoes: [
                     {id: "00", endereco: require('./imgs/pecs/acoes/beber.png'), valor: "Beber"},
                     {id: "01", endereco: require('./imgs/pecs/acoes/comer.png'), valor: "Comer"},
@@ -25,18 +29,49 @@ export default class prototipoV1 extends Component {
                     {id: "11", endereco: require('./imgs/pecs/estados/faminto.png'), valor: "Faminto"},
                 ],
                 historico:[],
-                indexAtual: null,
+                indexAtual: 0,
                 btnApagar: false,
                 frase: []
             };
+            this._panResponder = PanResponder.create(
+                {
+                    onStartShouldSetPanResponder:(evt, gesturesState)=>true,
+                    onPanResponderMove:(evt,gesturesState)=>{
+                        if(this.state.historico.length>0){
+                            this.setState({pecAtualMarginLeft: gesturesState.moveX})
+                        }
+                    },
+                    onPanResponderRelease:(evt,gesturesState)=>{
+                        if(gesturesState.moveX<85){
+                            var index = this.state.indexAtual;
+                            var arrayPecs = [...this.state.historico];
+                            if(index!=0){
+                                var pecAnterior = arrayPecs[--index];
+                                this.setState({pecAtual: pecAnterior.endereco, indexAtual: index});
+                                this.setState({pecAtualMarginLeft:'35%'})   
+                            } else this.setState({pecAtualMarginLeft:'35%'})   
+                        }
+                        if(gesturesState.moveX>235){
+                            var index = this.state.indexAtual;
+                            var arrayPecs = [...this.state.historico];
+                            if(index<arrayPecs.length-1){
+                                var pecSeguinte = arrayPecs[++index];
+                                this.setState({pecAtual: pecSeguinte.endereco, indexAtual: index});
+                                this.setState({pecAtualMarginLeft:'35%'})   
+                            } else this.setState({pecAtualMarginLeft:'35%'})   
+                        }
+                        if(gesturesState.moveX<=235 && gesturesState.moveX>=85)
+                        this.setState({pecAtualMarginLeft:'35%'})   
+                    }
+                }
+            )
         }
-       
         mudaPec(pec){
             this.setState({pecAtual: pec.endereco});
             const lista = this.state.historico.concat(pec);
             const frase = this.state.frase.concat(pec.valor)
             this.setState({historico: lista, frase:frase});
-            this.setState({indexAtual: this.state.historico.length+1});
+            this.setState({indexAtual: this.state.historico.length});
             if(this.state.historico.length >= 0){
                 this.setState({btnApagar: true});
             }
@@ -70,10 +105,32 @@ export default class prototipoV1 extends Component {
         }
         on_pecPreviewClick(pec){
             let index = this.state.historico.indexOf(pec);
-            alert(index);
             this.setState({pecAtual: pec.endereco, indexAtual: index});
+          //  alert(this.state.indexAtual);
         }
+        onSwipeLeft(index){
+            var arrayPecs = [...this.state.historico];
+            if(index!=0){
+                var pecAnterior = arrayPecs[--index];
+                this.setState({pecAtual: pecAnterior.endereco, indexAtual: index});
+            }
+        }
+        onSwipeRight(index){
+            var arrayPecs = [...this.state.historico];
+            if(index<arrayPecs.length-1){
+                var pecSeguinte = arrayPecs[++index];
+                this.setState({pecAtual: pecSeguinte.endereco, indexAtual: index});
+            }
+        }
+       
         render() {
+            const pecAtual = this.state.pecAtual;
+            const indexAtual = this.state.indexAtual;
+            const config = {
+                velocityThreshold: 0.5,
+                directionalOffsetThreshold: 80,
+                gestureIsClickThreshold: 20
+              };
             return (
             <View style={Estilos.body}>
                  <View style={Estilos.header}>
@@ -112,10 +169,15 @@ export default class prototipoV1 extends Component {
                             <Text style={Estilos.btnTxt}> X </Text>
                         </View>
                     </TouchableOpacity>):null}
-                   
-                    <View style={Estilos.areaPecs}>
-                        <Pecs endereco={this.state.pecAtual} estiloPec = {Estilos.imgPecsAdicionar} />
-                    </View>
+                  
+                       <View  style={Estilos.areaPecs, {backgroundColor:this.state.background}} >
+                          <View style={{marginLeft: this.state.pecAtualMarginLeft}}  {...this._panResponder.panHandlers}>
+                             <Pecs endereco={this.state.pecAtual} 
+                                estiloPec = {Estilos.imgPecsAdicionar} 
+                                />
+                            </View>
+                        </View>
+                 
                     <View style={Estilos.categorias}></View>
                     <FlatList 
                         data={this.state.arrayAcoes}
